@@ -1,4 +1,4 @@
-> **Unofficial test builds — not MeshCore.** ElectroBus does not claim MeshCore or Pycom IP. This repo is only for testing custom firmware on a Pycom FiPy + Expansion Board 3. Customizations were made **with AI assistance (Cursor)**. Read [NOTICE.md](NOTICE.md) and [FIPY-EXPANSION.md](FIPY-EXPANSION.md). Download [Releases](https://github.com/ElectroBus/Fipy-Meshcore/releases/latest). Use the **MeshCore** app, not Meshtastic.
+> **Unofficial test builds — not MeshCore.** ElectroBus does not claim MeshCore or Pycom IP. This repo is only for testing custom firmware on a Pycom FiPy + Expansion Board 3. Customizations were made **with AI assistance (Cursor)**. Device hub: [fipy-expansion-board](https://github.com/ElectroBus/fipy-expansion-board). Read [NOTICE.md](NOTICE.md) and [FIPY-EXPANSION.md](FIPY-EXPANSION.md). Download [Releases](https://github.com/ElectroBus/Fipy-Meshcore/releases/latest). Use the **MeshCore** app, not Meshtastic.
 
 ## About MeshCore
 
