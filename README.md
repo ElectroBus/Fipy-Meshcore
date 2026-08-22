@@ -1,3 +1,5 @@
+> **Unofficial test builds — not MeshCore.** ElectroBus does not claim MeshCore or Pycom IP. This repo is only for testing custom firmware on a Pycom FiPy + Expansion Board 3. Customizations were made **with AI assistance (Cursor)**. Read [NOTICE.md](NOTICE.md) and [FIPY-EXPANSION.md](FIPY-EXPANSION.md). Download [Releases](https://github.com/ElectroBus/Fipy-Meshcore/releases/latest). Use the **MeshCore** app, not Meshtastic.
+
 ## About MeshCore
 
 MeshCore is a lightweight, portable C++ library that enables multi-hop packet routing for embedded projects using LoRa and other packet radios. It is designed for developers who want to create resilient, decentralized communication networks that work without the internet.
