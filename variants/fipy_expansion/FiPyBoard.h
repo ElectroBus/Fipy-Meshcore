@@ -26,6 +26,10 @@ public:
 
     // EB3 USB-serial PIC is jumpered to GPIO1 (TX) and GPIO2 (RX), not GPIO3.
     Serial.begin(115200, SERIAL_8N1, PIN_SERIAL_RX, PIN_SERIAL_TX);
+
+#ifdef ENABLE_USB_INTERFACE
+    setInhibitSleep(true);
+#endif
   }
 
   uint32_t getIRQGpio() override {

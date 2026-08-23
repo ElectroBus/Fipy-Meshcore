@@ -33,10 +33,11 @@ The FiPy radio is an onboard **SX1272** (868 / 915 MHz, not 433). There is no of
 
 | Image | Env | What it is |
 |---|---|---|
-| Bare | `FiPy_companion_radio_ble_bare` | MeshCore app over BLE. No OLED. |
-| Full | `FiPy_companion_radio_ble` | BLE + SSD1306 on P9/P10 + I2C sensors |
+| Bare BLE | `FiPy_companion_radio_ble_bare` | MeshCore app over Bluetooth. No OLED. |
+| Full BLE | `FiPy_companion_radio_ble` | BLE + SSD1306 on P9/P10 + I2C sensors |
+| USB | `FiPy_companion_radio_usb` | MeshCore app over the Expansion Board USB serial port. No BLE, no OLED. |
 
-BLE pairing PIN: `123456`
+BLE pairing PIN: `123456`. USB companion has no PIN; pick the COM port in the MeshCore app (USB / serial).
 
 Default radio is MeshCore's compiled 869.618 MHz / 62.5 kHz / SF8. Change region in the MeshCore app if you are on 915.
 
@@ -44,11 +45,39 @@ The FiPy is a **4 MB, no-PSRAM** ESP32. These images use `min_spiffs` and a smal
 
 ## Flash
 
-Use the **MeshCore app**, not Meshtastic.
+Use the **MeshCore app**, not Meshtastic. Flash a `*.factory.bin` at **0x0**. Chip is **ESP32** (not S3). Flash size **4MB**.
 
-1. Plug the Expansion Board USB into a data cable. The PIC should put the FiPy into download mode.
-2. If it does not, hold **Reset** on the FiPy, tap **P2 / GPIO0** to GND (or hold the module reset while GPIO0 is low), then release reset.
-3. Flash the `*.factory.bin` at **0x0** with Chrome/Edge ([Adafruit ESP Web Flasher](https://adafruit.github.io/Adafruit_WebSerial_ESPTool/) or [esp.huhn.me](https://esp.huhn.me/)).
+After flashing the USB image, leave **TX and RX jumpers on**, remove the P2-to-GND boot jumper, reset the FiPy, then in the MeshCore web/desktop app choose **USB** and the Expansion Board COM port (115200). Do not open that port in another serial monitor at the same time.
+
+Expansion Board 3 will **not** auto-reset into the bootloader. Web flashers and esptool expect DTR/RTS; this PIC does not do that. The Safe Boot button is also the wrong control — that is MicroPython safe boot on P12, not ESP32 download mode.
+
+### 1. Jumpers and cable
+
+- Use a **data** USB cable, Chrome or Edge.
+- **TX and RX jumpers on.** CTS and RTS **off**.
+- In Windows Device Manager you should see a **COM port**. If the green USB LED on a 3.1 board is dark and there is no COM port, the PIC is stuck in DFU and needs a Pycom `dfu-util` update first.
+
+### 2. Put the FiPy in download mode
+
+Do this **before** you click Connect in the flasher.
+
+1. Jumper **P2** (GPIO0, the RGB LED pin) to **GND**.
+2. Press and release **Reset on the FiPy module** (not Safe Boot on the expansion board).
+3. Leave P2 grounded until the flash finishes.
+
+### 3. If the flasher still cannot sync
+
+The ESP32 ROM bootloader listens on **P0 / GPIO3**. Expansion Board 3 routes USB RX to **GPIO2**, which is why a web flasher often opens the COM port and then never talks to the chip.
+
+Add a jumper wire from the expansion board **RX** line to **P0**, keep P2 at GND, press FiPy Reset again, then flash.
+
+Local flash (after the steps above). Replace `COM5` with your port:
+
+```
+esptool.py --chip esp32 --port COM5 --baud 115200 --before no-reset --after no-reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 4MB 0x0 meshcore-fipy-expansion-ble-bare.factory.bin
+```
+
+`--before no-reset` is required. The tool must not toggle reset; you already entered download mode by hand.
 
 ## Battery
 
