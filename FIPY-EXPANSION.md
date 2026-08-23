@@ -35,9 +35,9 @@ The FiPy radio is an onboard **SX1272** (868 / 915 MHz, not 433). There is no of
 |---|---|---|
 | Bare BLE | `FiPy_companion_radio_ble_bare` | MeshCore app over Bluetooth. No OLED. |
 | Full BLE | `FiPy_companion_radio_ble` | BLE + SSD1306 on P9/P10 + I2C sensors |
-| USB | `FiPy_companion_radio_usb` | MeshCore app over the Expansion Board USB serial port. No BLE, no OLED. |
+| USB | `FiPy_companion_radio_usb` | MeshCore web app over USB serial (RX on **P0 / GPIO3**) plus BLE PIN `123456`. |
 
-BLE pairing PIN: `123456`. USB companion has no PIN; pick the COM port in the MeshCore app (USB / serial).
+BLE pairing PIN: `123456`. Official [flasher.meshcore.io](https://flasher.meshcore.io) will **not** list this board. Use [app.meshcore.nz](https://app.meshcore.nz) (USB or Bluetooth), not the flasher, after you have flashed a `.factory.bin` yourself.
 
 Default radio is MeshCore's compiled 869.618 MHz / 62.5 kHz / SF8. Change region in the MeshCore app if you are on 915.
 
@@ -47,7 +47,9 @@ The FiPy is a **4 MB, no-PSRAM** ESP32. These images use `min_spiffs` and a smal
 
 Use the **MeshCore app**, not Meshtastic. Flash a `*.factory.bin` at **0x0**. Chip is **ESP32** (not S3). Flash size **4MB**.
 
-After flashing the USB image, leave **TX and RX jumpers on**, remove the P2-to-GND boot jumper, reset the FiPy, then in the MeshCore web/desktop app choose **USB** and the Expansion Board COM port (115200). Do not open that port in another serial monitor at the same time.
+After flashing the USB image, remove the P2-to-GND boot jumper. Keep the **TX jumper** on. Keep your **PIC-RX-to-P0** flash wire (firmware RX is P0 / GPIO3, same as the bootloader). The stock **RX jumper (GPIO2)** is not used by the USB image. If the BAT jumper really ties GPIO3, take it off so it does not load the UART.
+
+Then open [app.meshcore.nz](https://app.meshcore.nz) in Chrome/Edge → **USB** → Expansion Board COM port at **115200**. Or connect over **Bluetooth** with PIN `123456`. Do not use [flasher.meshcore.io](https://flasher.meshcore.io) to connect; that site only flashes official boards.
 
 Expansion Board 3 will **not** auto-reset into the bootloader. Web flashers and esptool expect DTR/RTS; this PIC does not do that. The Safe Boot button is also the wrong control — that is MicroPython safe boot on P12, not ESP32 download mode.
 

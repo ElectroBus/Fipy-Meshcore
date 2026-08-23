@@ -24,7 +24,7 @@ public:
     pinMode(PIN_BATT_EN, OUTPUT);
     digitalWrite(PIN_BATT_EN, HIGH);
 
-    // EB3 USB-serial PIC is jumpered to GPIO1 (TX) and GPIO2 (RX), not GPIO3.
+    // USB companion uses GPIO3/P0 (ROM UART0 RX). BLE-only builds use GPIO2 (EB3 RX jumper).
     Serial.begin(115200, SERIAL_8N1, PIN_SERIAL_RX, PIN_SERIAL_TX);
 
 #ifdef ENABLE_USB_INTERFACE
